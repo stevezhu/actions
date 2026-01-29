@@ -12,11 +12,6 @@ on:
         default: "package.json"
         required: false
         type: string
-      pnpm-version:
-        description: "Version of pnpm to use"
-        default: "latest"
-        required: false
-        type: string
       lint-command:
         description: "Command to run linting"
         default: "pnpm run lint --affected"
@@ -48,8 +43,6 @@ jobs:
           fetch-depth: ${{ github.event.pull_request.commits || 2 }}
 
       - uses: pnpm/action-setup@v4
-        with:
-          version: ${{ inputs.pnpm-version }}
 
       - uses: actions/setup-node@v6
         with:
