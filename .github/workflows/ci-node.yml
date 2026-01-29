@@ -17,11 +17,6 @@ on:
         default: "latest"
         required: false
         type: string
-      fetch-depth:
-        description: "Number of commits to fetch"
-        default: 1
-        required: false
-        type: number
       lint-command:
         description: "Command to run linting"
         default: "pnpm run lint"
@@ -50,8 +45,6 @@ jobs:
 
     steps:
       - uses: actions/checkout@v6
-        with:
-          fetch-depth: ${{ inputs.fetch-depth }}
 
       - uses: pnpm/action-setup@v4
         with:
