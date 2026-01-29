@@ -73,11 +73,8 @@ jobs:
             echo "No ci:prepare script found, skipping."
           fi
 
-      - name: Lint
-        run: ${{ inputs.lint-command }}
+      - run: ${{ inputs.lint-command }}
 
-      - name: Build
-        run: ${{ inputs.build-command }}
+      - run: ${{ inputs.build-command }}
 
-      - name: Test
-        run: ${{ inputs.test-command }}
+      - run: ${{ inputs.test-command }}
