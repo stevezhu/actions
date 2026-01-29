@@ -54,8 +54,7 @@ jobs:
       - name: Create Pull Request
         uses: peter-evans/create-pull-request@v8
         with:
-          token: ${{ secrets.GITHUB_TOKEN }}
-          commit-message: "chore(release): ${{ inputs.version_type }} version bump to ${{ steps.bump_version.outputs.new }}"
           branch: "bump-version-${{ steps.bump_version.outputs.new }}"
+          committer: "github-actions[bot] <41898282+github-actions[bot]@users.noreply.github.com>"
+          commit-message: "chore(release): ${{ inputs.version_type }} version bump to ${{ steps.bump_version.outputs.new }}"
           title: "chore(release): ${{ inputs.version_type }} version bump to ${{ steps.bump_version.outputs.new }}"
-          body: "Bumps version to ${{ steps.bump_version.outputs.new }}"
