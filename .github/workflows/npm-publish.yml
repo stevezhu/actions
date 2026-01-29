@@ -1,4 +1,4 @@
-name: Reusable Publish Package
+name: NPM Publish
 
 on:
   workflow_call:
@@ -11,6 +11,16 @@ on:
       registry-url:
         description: 'NPM Registry URL'
         default: 'https://registry.npmjs.org'
+        required: false
+        type: string
+      build-command:
+        description: 'Command to build the package'
+        default: 'pnpm run build'
+        required: false
+        type: string
+      publish-command:
+        description: 'Command to publish the package'
+        default: 'pnpm publish --access public --no-git-checks --provenance'
         required: false
         type: string
     secrets:
@@ -38,9 +48,9 @@ jobs:
       - run: pnpm install
       - run: pnpm run lint
       - run: pnpm run test
-      - run: pnpm run build
+      - run: ${{ inputs.build-command }}
 
       - name: Publish
-        run: pnpm publish --access public --no-git-checks
+        run: ${{ inputs.publish-command }}
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}

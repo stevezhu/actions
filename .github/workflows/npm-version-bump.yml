@@ -1,4 +1,4 @@
-name: Reusable Bump Version
+name: NPM Version Bump
 
 on:
   workflow_call:

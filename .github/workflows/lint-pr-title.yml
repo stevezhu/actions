@@ -1,4 +1,4 @@
-name: Reusable Check PR Title
+name: Check PR Title
 
 on:
   workflow_call:
