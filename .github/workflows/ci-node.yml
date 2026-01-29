@@ -3,6 +3,10 @@ name: Node CI
 on:
   workflow_call:
     inputs:
+      node-version:
+        description: 'Node.js version to use'
+        required: false
+        type: string
       node-version-file:
         description: "Path to package.json or .nvmrc for node version"
         default: "package.json"
@@ -59,6 +63,7 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v6
         with:
+          node-version: ${{ inputs.node-version }}
           node-version-file: ${{ inputs.node-version-file }}
           cache: pnpm
 

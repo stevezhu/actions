@@ -8,6 +8,10 @@ on:
         required: true
         type: string
         default: 'patch'
+      node-version:
+        description: 'Node.js version to use'
+        required: false
+        type: string
       node-version-file:
         description: 'Path to package.json'
         default: 'package.json'
@@ -30,6 +34,7 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v6
         with:
+          node-version: ${{ inputs.node-version }}
           node-version-file: ${{ inputs.node-version-file }}
           cache: pnpm
           registry-url: https://registry.npmjs.org
