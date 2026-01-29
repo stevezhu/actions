@@ -1,4 +1,4 @@
-name: Check PR Title
+name: Lint PR Title
 
 on:
   workflow_call:
@@ -7,6 +7,7 @@ jobs:
   validate-title:
     name: Validate PR title
     runs-on: ubuntu-latest
+    timeout-minutes: 5
     permissions:
       pull-requests: read
     steps:
