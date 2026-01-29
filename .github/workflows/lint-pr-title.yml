@@ -1,3 +1,5 @@
+# Description: Reusable workflow to validate PR titles using Conventional Commits.
+# Author: Steve Zhu
 name: Lint PR Title
 
 on:

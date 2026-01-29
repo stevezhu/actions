@@ -1,3 +1,5 @@
+# Description: Reusable workflow for Node.js CI (Lint, Build, Test).
+# Author: Steve Zhu
 name: Node CI
 
 on:
@@ -8,7 +10,7 @@ on:
         required: false
         type: string
       node-version-file:
-        description: "Path to package.json or .nvmrc for node version"
+        description: "Path to package.json for node version"
         default: "package.json"
         required: false
         type: string
