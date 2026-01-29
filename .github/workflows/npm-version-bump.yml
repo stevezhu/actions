@@ -38,11 +38,6 @@ jobs:
           cache: pnpm
           registry-url: https://registry.npmjs.org
 
-      - name: Configure git user to github-actions[bot]
-        run: |
-          git config --local user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git config --local user.name "github-actions[bot]"
-
       - name: Get current version
         id: current_version
         run: |
@@ -56,19 +51,11 @@ jobs:
           NEW_VERSION=$(node -p "require('./package.json').version")
           echo "new=$NEW_VERSION" >> $GITHUB_OUTPUT
 
-      - name: Create version branch
-        run: |
-          BRANCH_NAME="bump-version-${{ steps.bump_version.outputs.new }}"
-          git checkout -b $BRANCH_NAME
-          echo "branch=$BRANCH_NAME" >> $GITHUB_ENV
-
-      - name: Commit and push changes
-        run: |
-          git add package.json
-          git commit -m "chore(release): ${{ inputs.version_type }} version bump to ${{ steps.bump_version.outputs.new }}"
-          git push origin ${{ env.branch }}
-
-      - name: Create pull request
-        run: gh pr create --fill
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - name: Create Pull Request
+        uses: peter-evans/create-pull-request@v8
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          commit-message: "chore(release): ${{ inputs.version_type }} version bump to ${{ steps.bump_version.outputs.new }}"
+          branch: "bump-version-${{ steps.bump_version.outputs.new }}"
+          title: "chore(release): ${{ inputs.version_type }} version bump to ${{ steps.bump_version.outputs.new }}"
+          body: "Bumps version to ${{ steps.bump_version.outputs.new }}"
