@@ -1,5 +1,3 @@
-# Description: Reusable workflow to publish packages to NPM with provenance.
-# Author: Steve Zhu
 name: NPM Publish
 
 on:

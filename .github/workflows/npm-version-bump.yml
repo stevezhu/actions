@@ -1,5 +1,3 @@
-# Description: Reusable workflow to bump package versions and create release PRs.
-# Author: Steve Zhu
 name: NPM Version Bump
 
 on:

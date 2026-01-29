@@ -1,5 +1,3 @@
-# Description: Reusable workflow for Node.js CI (Lint, Build, Test).
-# Author: Steve Zhu
 name: Node CI
 
 on:

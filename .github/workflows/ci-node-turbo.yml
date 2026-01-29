@@ -1,5 +1,3 @@
-# Description: Reusable workflow for Node.js CI with Turborepo (Lint, Build, Test with --affected).
-# Author: Steve Zhu
 name: Node CI (Turbo)
 
 on:
