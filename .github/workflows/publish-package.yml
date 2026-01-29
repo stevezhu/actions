@@ -1,0 +1,46 @@
+name: Reusable Publish Package
+
+on:
+  workflow_call:
+    inputs:
+      node-version-file:
+        description: 'Path to package.json'
+        default: 'package.json'
+        required: false
+        type: string
+      registry-url:
+        description: 'NPM Registry URL'
+        default: 'https://registry.npmjs.org'
+        required: false
+        type: string
+    secrets:
+      NPM_TOKEN:
+        required: true
+
+jobs:
+  build-and-publish:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      id-token: write # For provenance/OIDC if enabled
+    steps:
+      - uses: actions/checkout@v6
+
+      - uses: pnpm/action-setup@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v6
+        with:
+          node-version-file: ${{ inputs.node-version-file }}
+          cache: pnpm
+          registry-url: ${{ inputs.registry-url }}
+
+      - run: pnpm install
+      - run: pnpm run lint
+      - run: pnpm run test
+      - run: pnpm run build
+
+      - name: Publish
+        run: pnpm publish --access public --no-git-checks
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}

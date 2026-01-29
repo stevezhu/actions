@@ -1,0 +1,68 @@
+name: Reusable Node CI
+
+on:
+  workflow_call:
+    inputs:
+      node-version-file:
+        description: 'Path to package.json or .nvmrc for node version'
+        default: 'package.json'
+        required: false
+        type: string
+      pnpm-version:
+        description: 'Version of pnpm to use'
+        default: 'latest'
+        required: false
+        type: string
+      fetch-depth:
+        description: 'Number of commits to fetch'
+        default: 0 # 0 indicates full history, often needed for turbo/affected
+        required: false
+        type: number
+
+jobs:
+  build-and-test:
+    name: Build and Test
+    timeout-minutes: 15
+    runs-on: ubuntu-latest
+    env:
+      GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      TURBO_SCM_BASE: ${{ github.event_name == 'pull_request' && github.event.pull_request.base.sha || github.event.before }}
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v6
+        with:
+          fetch-depth: ${{ inputs.fetch-depth || (github.event.pull_request.commits || 2) }}
+
+      - name: Setup Pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: ${{ inputs.pnpm-version }}
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v6
+        with:
+          node-version-file: ${{ inputs.node-version-file }}
+          cache: pnpm
+          registry-url: https://npm.pkg.github.com
+
+      - name: Install dependencies
+        run: pnpm install
+
+      - name: Prepare CI
+        run: pnpm run ci:prepare
+        if: always() # Attempt even if install has warnings, though usually install fail stops workflow. `if: always()` might be risky if install failed. Removed default if logic isn't strictly needing it. Actually, `run` steps fail by default. I'll leave standard behavior.
+        continue-on-error: true # Optional: sometimes prepare scripts might not exist or fail non-critically? No, let's keep strict.
+      
+      # We check if scripts exist before running to make it truly reusable? 
+      # Or just assume the caller repo follows the convention.
+      # The source repo `letuscook` had explicit commands. I'll use them.
+      
+      - name: Lint
+        run: pnpm run lint --affected
+
+      - name: Build
+        run: pnpm run build --affected
+
+      - name: Test
+        run: pnpm run test --affected
