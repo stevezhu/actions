@@ -4,27 +4,27 @@ on:
   workflow_call:
     inputs:
       node-version:
-        description: 'Node.js version to use'
+        description: "Node.js version to use"
         required: false
         type: string
       node-version-file:
-        description: 'Path to package.json'
-        default: 'package.json'
+        description: "Path to package.json"
+        default: "package.json"
         required: false
         type: string
       registry-url:
-        description: 'NPM Registry URL'
-        default: 'https://registry.npmjs.org'
+        description: "NPM Registry URL"
+        default: "https://registry.npmjs.org"
         required: false
         type: string
       build-command:
-        description: 'Command to build the package'
-        default: 'pnpm run --if-present build'
+        description: "Command to build the package"
+        default: "pnpm run --if-present build"
         required: false
         type: string
       publish-command:
-        description: 'Command to publish the package'
-        default: 'pnpm publish --access public --no-git-checks --provenance'
+        description: "Command to publish the package"
+        default: "pnpm publish --access public --no-git-checks --provenance"
         required: false
         type: string
     secrets:

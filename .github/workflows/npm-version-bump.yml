@@ -4,17 +4,17 @@ on:
   workflow_call:
     inputs:
       version_type:
-        description: 'Version bump type (patch, minor, major)'
+        description: "Version bump type (patch, minor, major)"
         required: true
         type: string
-        default: 'patch'
+        default: "patch"
       node-version:
-        description: 'Node.js version to use'
+        description: "Node.js version to use"
         required: false
         type: string
       node-version-file:
-        description: 'Path to package.json'
-        default: 'package.json'
+        description: "Path to package.json"
+        default: "package.json"
         required: false
         type: string
 
