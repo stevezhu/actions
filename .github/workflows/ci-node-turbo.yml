@@ -12,21 +12,6 @@ on:
         default: "package.json"
         required: false
         type: string
-      lint-command:
-        description: "Command to run linting"
-        default: "pnpm run --if-present lint --affected"
-        required: false
-        type: string
-      build-command:
-        description: "Command to run build"
-        default: "pnpm run --if-present build --affected"
-        required: false
-        type: string
-      test-command:
-        description: "Command to run tests"
-        default: "pnpm run --if-present test --affected"
-        required: false
-        type: string
 
 jobs:
   build-and-test:
@@ -36,26 +21,18 @@ jobs:
     env:
       GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       TURBO_SCM_BASE: ${{ github.event_name == 'pull_request' && github.event.pull_request.base.sha || github.event.before }}
-
     steps:
       - uses: actions/checkout@v6
         with:
           fetch-depth: ${{ github.event.pull_request.commits || 2 }}
-
       - uses: pnpm/action-setup@v4
-
       - uses: actions/setup-node@v6
         with:
           node-version: ${{ inputs.node-version }}
           node-version-file: ${{ inputs.node-version-file }}
           cache: pnpm
-
       - run: pnpm install
-
       - run: pnpm run --if-present ci:prepare
-
-      - run: ${{ inputs.lint-command }}
-
-      - run: ${{ inputs.build-command }}
-
-      - run: ${{ inputs.test-command }}
+      - run: pnpm run --if-present lint --affected
+      - run: pnpm run --if-present build --affected
+      - run: pnpm run --if-present test --affected

@@ -38,31 +38,37 @@ jobs:
           cache: pnpm
           registry-url: https://registry.npmjs.org
 
-      - run: |
+      - name: Configure git user to github-actions[bot]
+        run: |
           git config --local user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git config --local user.name "github-actions[bot]"
 
-      - id: current_version
+      - name: Get current version
+        id: current_version
         run: |
           CURRENT_VERSION=$(node -p "require('./package.json').version")
           echo "current=$CURRENT_VERSION" >> $GITHUB_OUTPUT
 
-      - id: bump_version
+      - name: Bump version
+        id: bump_version
         run: |
           npm version ${{ inputs.version_type }} --no-git-tag-version
           NEW_VERSION=$(node -p "require('./package.json').version")
           echo "new=$NEW_VERSION" >> $GITHUB_OUTPUT
 
-      - run: |
+      - name: Create version branch
+        run: |
           BRANCH_NAME="bump-version-${{ steps.bump_version.outputs.new }}"
           git checkout -b $BRANCH_NAME
           echo "branch=$BRANCH_NAME" >> $GITHUB_ENV
 
-      - run: |
+      - name: Commit and push changes
+        run: |
           git add package.json
           git commit -m "chore(release): ${{ inputs.version_type }} version bump to ${{ steps.bump_version.outputs.new }}"
           git push origin ${{ env.branch }}
 
-      - run: gh pr create --fill
+      - name: Create pull request
+        run: gh pr create --fill
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
