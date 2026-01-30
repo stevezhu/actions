@@ -23,7 +23,7 @@ on:
 
 jobs:
   ci:
-    uses: stevezhu/actions/.github/workflows/ci-node.yaml@main
+    uses: stevezhu/actions/.github/workflows/ci-node.yaml@v1.0.0
 ```
 
 ### CI Node.js (Turbo)
@@ -45,7 +45,7 @@ on:
 
 jobs:
   ci:
-    uses: stevezhu/actions/.github/workflows/ci-node-turbo.yaml@v1
+    uses: stevezhu/actions/.github/workflows/ci-node-turbo.yaml@v1.0.0
 ```
 
 ### NPM Publish
@@ -64,7 +64,7 @@ on:
 
 jobs:
   publish:
-    uses: stevezhu/actions/.github/workflows/npm-publish.yaml@v1
+    uses: stevezhu/actions/.github/workflows/npm-publish.yaml@v1.0.0
     secrets: inherit # Add this to inherit NPM_TOKEN from repo secrets if needed
 ```
 
@@ -93,7 +93,7 @@ on:
 
 jobs:
   bump-version:
-    uses: stevezhu/actions/.github/workflows/npm-bump-version.yaml@v1
+    uses: stevezhu/actions/.github/workflows/npm-bump-version.yaml@v1.0.0
     with:
       version_type: ${{ inputs.version_type }}
 ```
@@ -118,5 +118,5 @@ on:
 
 jobs:
   main:
-    uses: stevezhu/actions/.github/workflows/lint-pr-title.yaml@v1
+    uses: stevezhu/actions/.github/workflows/lint-pr-title.yaml@v1.0.0
 ```
