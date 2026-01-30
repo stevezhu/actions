@@ -65,6 +65,9 @@ on:
 jobs:
   publish:
     uses: stevezhu/actions/.github/workflows/npm-publish.yaml@v1.0.0
+    permissions:
+      contents: read
+      id-token: write
     secrets: inherit # Add this to inherit NPM_TOKEN from repo secrets if needed
 ```
 
@@ -94,6 +97,9 @@ on:
 jobs:
   bump-version:
     uses: stevezhu/actions/.github/workflows/npm-bump-version.yaml@v1.0.0
+    permissions:
+      contents: write
+      pull-requests: write
     with:
       version_type: ${{ inputs.version_type }}
 ```
