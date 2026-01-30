@@ -68,11 +68,11 @@ jobs:
     secrets: inherit # Add this to inherit NPM_TOKEN from repo secrets if needed
 ```
 
-### NPM Version Bump
+### NPM Bump Version
 
 Automates version bumping (patch, minor, major) and creating release PRs.
 
-**File**: `.github/workflows/npm-version-bump.yaml`
+**File**: `.github/workflows/npm-bump-version.yaml`
 
 **Usage**:
 
@@ -93,7 +93,7 @@ on:
 
 jobs:
   bump-version:
-    uses: stevezhu/actions/.github/workflows/npm-version-bump.yaml@v1
+    uses: stevezhu/actions/.github/workflows/npm-bump-version.yaml@v1
     with:
       version_type: ${{ inputs.version_type }}
 ```
@@ -110,7 +110,11 @@ Validates that PR titles follow the Conventional Commits specification.
 name: Lint PR Title
 on:
   pull_request:
-    types: [opened, edited, synchronize]
+    types:
+      - opened
+      - reopened
+      - edited
+      # - synchronize (if you use required Actions)
 
 jobs:
   main:

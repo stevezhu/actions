@@ -1,4 +1,4 @@
-name: NPM Version Bump
+name: NPM Bump Version
 
 on:
   workflow_call:
