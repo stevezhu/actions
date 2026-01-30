@@ -1,0 +1,38 @@
+name: Node CI (Turbo)
+
+on:
+  workflow_call:
+    inputs:
+      node-version:
+        description: "Node.js version to use"
+        required: false
+        type: string
+      node-version-file:
+        description: "Path to package.json for node version"
+        default: "package.json"
+        required: false
+        type: string
+
+jobs:
+  build-and-test:
+    name: Build and Test
+    timeout-minutes: 15
+    runs-on: ubuntu-latest
+    env:
+      GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      TURBO_SCM_BASE: ${{ github.event_name == 'pull_request' && github.event.pull_request.base.sha || github.event.before }}
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          fetch-depth: ${{ github.event.pull_request.commits || 2 }}
+      - uses: pnpm/action-setup@v4
+      - uses: actions/setup-node@v6
+        with:
+          node-version: ${{ inputs.node-version }}
+          node-version-file: ${{ inputs.node-version-file }}
+          cache: pnpm
+      - run: pnpm install
+      - run: pnpm run --if-present ci:prepare
+      - run: pnpm run --if-present lint --affected
+      - run: pnpm run --if-present build --affected
+      - run: pnpm run --if-present test --affected

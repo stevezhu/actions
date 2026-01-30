@@ -1,0 +1,60 @@
+name: NPM Bump Version
+
+on:
+  workflow_call:
+    inputs:
+      version_type:
+        description: "Version bump type (patch, minor, major)"
+        required: true
+        type: string
+        default: "patch"
+      node-version:
+        description: "Node.js version to use"
+        required: false
+        type: string
+      node-version-file:
+        description: "Path to package.json"
+        default: "package.json"
+        required: false
+        type: string
+
+jobs:
+  bump-version:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    permissions:
+      contents: write
+      pull-requests: write
+
+    steps:
+      - uses: actions/checkout@v6
+
+      - uses: pnpm/action-setup@v4
+
+      - uses: actions/setup-node@v6
+        with:
+          node-version: ${{ inputs.node-version }}
+          node-version-file: ${{ inputs.node-version-file }}
+          cache: pnpm
+          registry-url: https://registry.npmjs.org
+
+      - name: Get current version
+        id: current_version
+        run: |
+          CURRENT_VERSION=$(node -p "require('./package.json').version")
+          echo "current=$CURRENT_VERSION" >> $GITHUB_OUTPUT
+
+      - name: Bump version
+        id: bump_version
+        run: |
+          npm version ${{ inputs.version_type }} --no-git-tag-version
+          NEW_VERSION=$(node -p "require('./package.json').version")
+          echo "new=$NEW_VERSION" >> $GITHUB_OUTPUT
+
+      - name: Create Pull Request
+        uses: peter-evans/create-pull-request@v8
+        with:
+          branch: "bump-version-${{ steps.bump_version.outputs.new }}"
+          committer: "github-actions[bot] <41898282+github-actions[bot]@users.noreply.github.com>"
+          commit-message: "chore(release): ${{ inputs.version_type }} version bump to ${{ steps.bump_version.outputs.new }}"
+          title: "chore(release): ${{ inputs.version_type }} version bump to ${{ steps.bump_version.outputs.new }}"
