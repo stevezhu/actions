@@ -18,13 +18,12 @@ on:
   push:
     branches: [main]
   pull_request:
+    branches: [main]
+    types: [opened, synchronize]
 
 jobs:
   ci:
     uses: stevezhu/actions/.github/workflows/ci-node.yml@main
-    with:
-      node-version: "20"
-      # node-version-file: "package.json" # optional, defaults to package.json
 ```
 
 ### CI Node.js (Turbo)
@@ -36,17 +35,17 @@ CI workflow optimized for Monorepos using Turborepo. Checks for affected package
 **Usage**:
 
 ```yaml
-name: CI Turbo
+name: CI
 on:
   push:
     branches: [main]
   pull_request:
+    branches: [main]
+    types: [opened, synchronize]
 
 jobs:
   ci:
-    uses: stevezhu/actions/.github/workflows/ci-node-turbo.yml@main
-    with:
-      node-version: "20"
+    uses: stevezhu/actions/.github/workflows/ci-node-turbo.yml@v1
 ```
 
 ### NPM Publish
@@ -65,10 +64,8 @@ on:
 
 jobs:
   publish:
-    uses: stevezhu/actions/.github/workflows/npm-publish.yml@main
-    with:
-      node-version: "20"
-    secrets: inherit # Inherits NPM_TOKEN from repo secrets
+    uses: stevezhu/actions/.github/workflows/npm-publish.yml@v1
+    secrets: inherit # Add this to inherit NPM_TOKEN from repo secrets if needed
 ```
 
 ### NPM Version Bump
@@ -80,14 +77,14 @@ Automates version bumping (patch, minor, major) and creating release PRs.
 **Usage**:
 
 ```yaml
-name: Version Bump
+name: Bump Package Version
 on:
   workflow_dispatch:
     inputs:
-      type:
-        description: 'Version bump type'
+      version_type:
+        description: "Version bump type"
         required: true
-        default: 'patch'
+        default: "patch"
         type: choice
         options:
           - patch
@@ -95,12 +92,10 @@ on:
           - major
 
 jobs:
-  bump:
-    uses: stevezhu/actions/.github/workflows/npm-version-bump.yml@main
+  bump-version:
+    uses: stevezhu/actions/.github/workflows/npm-version-bump.yml@v1
     with:
-      version_type: ${{ inputs.type }}
-      node-version: "20"
-    secrets: inherit
+      version_type: ${{ inputs.version_type }}
 ```
 
 ### Lint PR Title
@@ -119,5 +114,5 @@ on:
 
 jobs:
   main:
-    uses: stevezhu/actions/.github/workflows/lint-pr-title.yml@main
+    uses: stevezhu/actions/.github/workflows/lint-pr-title.yml@v1
 ```
