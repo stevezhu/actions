@@ -8,7 +8,7 @@ This repository contains a collection of reusable GitHub Actions workflows for N
 
 Standard CI workflow for Node.js projects. Runs install, lint, build, and test.
 
-**File**: `.github/workflows/ci-node.yml`
+**File**: `.github/workflows/ci-node.yaml`
 
 **Usage**:
 
@@ -23,14 +23,14 @@ on:
 
 jobs:
   ci:
-    uses: stevezhu/actions/.github/workflows/ci-node.yml@main
+    uses: stevezhu/actions/.github/workflows/ci-node.yaml@main
 ```
 
 ### CI Node.js (Turbo)
 
 CI workflow optimized for Monorepos using Turborepo. Checks for affected packages.
 
-**File**: `.github/workflows/ci-node-turbo.yml`
+**File**: `.github/workflows/ci-node-turbo.yaml`
 
 **Usage**:
 
@@ -45,14 +45,14 @@ on:
 
 jobs:
   ci:
-    uses: stevezhu/actions/.github/workflows/ci-node-turbo.yml@v1
+    uses: stevezhu/actions/.github/workflows/ci-node-turbo.yaml@v1
 ```
 
 ### NPM Publish
 
 Automates publishing packages to the NPM registry. Requires `NPM_TOKEN` secret to be set in the repository or organization.
 
-**File**: `.github/workflows/npm-publish.yml`
+**File**: `.github/workflows/npm-publish.yaml`
 
 **Usage**:
 
@@ -64,7 +64,7 @@ on:
 
 jobs:
   publish:
-    uses: stevezhu/actions/.github/workflows/npm-publish.yml@v1
+    uses: stevezhu/actions/.github/workflows/npm-publish.yaml@v1
     secrets: inherit # Add this to inherit NPM_TOKEN from repo secrets if needed
 ```
 
@@ -72,7 +72,7 @@ jobs:
 
 Automates version bumping (patch, minor, major) and creating release PRs.
 
-**File**: `.github/workflows/npm-version-bump.yml`
+**File**: `.github/workflows/npm-version-bump.yaml`
 
 **Usage**:
 
@@ -93,7 +93,7 @@ on:
 
 jobs:
   bump-version:
-    uses: stevezhu/actions/.github/workflows/npm-version-bump.yml@v1
+    uses: stevezhu/actions/.github/workflows/npm-version-bump.yaml@v1
     with:
       version_type: ${{ inputs.version_type }}
 ```
@@ -102,7 +102,7 @@ jobs:
 
 Validates that PR titles follow the Conventional Commits specification.
 
-**File**: `.github/workflows/lint-pr-title.yml`
+**File**: `.github/workflows/lint-pr-title.yaml`
 
 **Usage**:
 
@@ -114,5 +114,5 @@ on:
 
 jobs:
   main:
-    uses: stevezhu/actions/.github/workflows/lint-pr-title.yml@v1
+    uses: stevezhu/actions/.github/workflows/lint-pr-title.yaml@v1
 ```
