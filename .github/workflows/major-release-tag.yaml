@@ -4,7 +4,7 @@ name: Update Major Release Tag
 
 on:
   release:
-    types: [created]
+    types: [released]
 
 jobs:
   update-major-release-tag:
