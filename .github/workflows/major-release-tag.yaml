@@ -1,0 +1,22 @@
+# Reference: https://gist.github.com/cicirello/ade1d559a89104140557389365154bc1
+
+name: Update Major Release Tag
+
+on:
+  release:
+    types: [released]
+
+jobs:
+  update-major-release-tag:
+    runs-on: ubuntu-slim
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v6
+      - name: Get major version and update release tag
+        run: |
+          VERSION=${GITHUB_REF#refs/tags/}
+          MAJOR=${VERSION%%.*}
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git tag -fa "${MAJOR}" -m 'Update major version tag'
+          git push origin "${MAJOR}" --force
