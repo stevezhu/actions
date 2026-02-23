@@ -37,7 +37,7 @@ jobs:
           node-version-file: ${{ inputs.node-version-file }}
           cache: pnpm
       - run: pnpm install
-      - run: pnpm run --if-present ci:prepare
+      - run: pnpm run --if-present init
       - run: pnpm run --if-present lint --affected
       - run: pnpm run --if-present build --affected
       - run: pnpm run --if-present test --affected
