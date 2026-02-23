@@ -1,6 +1,6 @@
 # Reference: https://gist.github.com/cicirello/ade1d559a89104140557389365154bc1
 
-name: Update Major Release Tag
+name: Update Release Tags
 
 on:
   release:
