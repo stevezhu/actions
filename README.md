@@ -125,4 +125,6 @@ on:
 jobs:
   main:
     uses: stevezhu/actions/.github/workflows/lint-pr-title.yaml@v1
+    permissions:
+      pull-requests: read
 ```
