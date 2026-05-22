@@ -85,9 +85,9 @@ on:
   workflow_dispatch:
     inputs:
       version_type:
-        description: "Version bump type"
+        description: 'Version bump type'
         required: true
-        default: "patch"
+        default: 'patch'
         type: choice
         options:
           - patch

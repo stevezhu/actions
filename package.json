@@ -1,0 +1,12 @@
+{
+  "license": "MIT",
+  "author": "Steve Zhu <4130171+stevezhu@users.noreply.github.com>",
+  "type": "module",
+  "scripts": {
+    "format": "oxfmt"
+  },
+  "devDependencies": {
+    "oxfmt": "^0.51.0"
+  },
+  "packageManager": "pnpm@11.2.2"
+}
