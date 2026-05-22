@@ -4,12 +4,12 @@ on:
   workflow_call:
     inputs:
       node-version:
-        description: "Node.js version to use"
+        description: 'Node.js version to use'
         required: false
         type: string
       node-version-file:
-        description: "Path to package.json for node version"
-        default: "package.json"
+        description: 'Path to package.json for node version'
+        default: 'package.json'
         required: false
         type: string
 
