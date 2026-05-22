@@ -1,14 +1,16 @@
-# Reusable GitHub Actions Workflows
+# Reusable GitHub Composite Actions
 
-This repository contains a collection of reusable GitHub Actions workflows for Node.js projects.
+This repository contains a collection of reusable GitHub composite actions for Node.js projects.
 
-## Available Workflows
+Composite actions run as steps inside the caller's job rather than as separate jobs, so the caller is responsible for `runs-on`, `permissions`, `timeout-minutes`, and `actions/checkout`.
 
-### CI Node.js
+## Available Actions
 
-Standard CI workflow for Node.js projects. Runs install, lint, build, and test.
+### Node CI
 
-**File**: `.github/workflows/ci-node.yaml`
+Installs dependencies with pnpm and runs `init`, `lint`, `build`, and `test` scripts.
+
+**Path**: `ci-node`
 
 **Usage**:
 
@@ -23,14 +25,18 @@ on:
 
 jobs:
   ci:
-    uses: stevezhu/actions/.github/workflows/ci-node.yaml@v1
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v6
+      - uses: stevezhu/actions/ci-node@v2
 ```
 
-### CI Node.js (Turbo)
+### Node CI (Turbo)
 
-CI workflow optimized for Monorepos using Turborepo. Checks for affected packages.
+CI optimized for Turborepo monorepos. Runs `lint`, `build`, and `test` with `--affected`.
 
-**File**: `.github/workflows/ci-node-turbo.yaml`
+**Path**: `ci-node-turbo`
 
 **Usage**:
 
@@ -45,14 +51,23 @@ on:
 
 jobs:
   ci:
-    uses: stevezhu/actions/.github/workflows/ci-node-turbo.yaml@v1
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - name: Get fetch depth
+        id: get_fetch_depth
+        run: echo "fetch_depth=$((${{ github.event.pull_request.commits || 1 }} + 1))" >> $GITHUB_OUTPUT
+      - uses: actions/checkout@v6
+        with:
+          fetch-depth: ${{ steps.get_fetch_depth.outputs.fetch_depth }}
+      - uses: stevezhu/actions/ci-node-turbo@v2
 ```
 
 ### NPM Publish
 
-Automates publishing packages to the NPM registry. Requires `NPM_TOKEN` secret to be set in the repository or organization.
+Runs lint/test/build then publishes to NPM with provenance.
 
-**File**: `.github/workflows/npm-publish.yaml`
+**Path**: `npm-publish`
 
 **Usage**:
 
@@ -64,18 +79,23 @@ on:
 
 jobs:
   publish:
-    uses: stevezhu/actions/.github/workflows/npm-publish.yaml@v1
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
     permissions:
       contents: read
       id-token: write
-    secrets: inherit # Add this to inherit NPM_TOKEN from repo secrets if needed
+    steps:
+      - uses: actions/checkout@v6
+      - uses: stevezhu/actions/npm-publish@v2
+        with:
+          npm-token: ${{ secrets.NPM_TOKEN }}
 ```
 
 ### NPM Bump Version
 
-Automates version bumping (patch, minor, major) and creating release PRs.
+Bumps the `package.json` version and opens a PR with the change.
 
-**File**: `.github/workflows/npm-bump-version.yaml`
+**Path**: `npm-bump-version`
 
 **Usage**:
 
@@ -96,19 +116,23 @@ on:
 
 jobs:
   bump-version:
-    uses: stevezhu/actions/.github/workflows/npm-bump-version.yaml@v1
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
     permissions:
       contents: write
       pull-requests: write
-    with:
-      version_type: ${{ inputs.version_type }}
+    steps:
+      - uses: actions/checkout@v6
+      - uses: stevezhu/actions/npm-bump-version@v2
+        with:
+          version_type: ${{ inputs.version_type }}
 ```
 
 ### Lint PR Title
 
-Validates that PR titles follow the Conventional Commits specification.
+Validates PR titles follow the Conventional Commits specification.
 
-**File**: `.github/workflows/lint-pr-title.yaml`
+**Path**: `lint-pr-title`
 
 **Usage**:
 
@@ -124,7 +148,10 @@ on:
 
 jobs:
   main:
-    uses: stevezhu/actions/.github/workflows/lint-pr-title.yaml@v1
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
     permissions:
       pull-requests: read
+    steps:
+      - uses: stevezhu/actions/lint-pr-title@v2
 ```

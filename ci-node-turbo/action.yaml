@@ -1,0 +1,37 @@
+name: Node CI (Turbo)
+description: Install dependencies with pnpm and run init, lint, build, and test scripts using Turborepo's --affected flag.
+
+inputs:
+  node-version:
+    description: 'Node.js version to use'
+    required: false
+  node-version-file:
+    description: 'Path to package.json for node version'
+    default: 'package.json'
+    required: false
+
+runs:
+  using: composite
+  steps:
+    - uses: pnpm/action-setup@fc06bc1257f339d1d5d8b3a19a8cae5388b55320 # v5
+    - uses: actions/setup-node@v6
+      with:
+        node-version: ${{ inputs.node-version }}
+        node-version-file: ${{ inputs.node-version-file }}
+        cache: pnpm
+    - shell: bash
+      run: pnpm install
+    - shell: bash
+      run: pnpm run --if-present init
+    - shell: bash
+      env:
+        TURBO_SCM_BASE: ${{ github.event_name == 'pull_request' && github.event.pull_request.base.sha || github.event.before }}
+      run: pnpm run --if-present lint --affected
+    - shell: bash
+      env:
+        TURBO_SCM_BASE: ${{ github.event_name == 'pull_request' && github.event.pull_request.base.sha || github.event.before }}
+      run: pnpm run --if-present build --affected
+    - shell: bash
+      env:
+        TURBO_SCM_BASE: ${{ github.event_name == 'pull_request' && github.event.pull_request.base.sha || github.event.before }}
+      run: pnpm run --if-present test --affected
