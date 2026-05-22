@@ -1,0 +1,12 @@
+name: Checkout (Turbo)
+description: Check out the repository with a fetch-depth sized for Turborepo's --affected diff base (PR commits + 1, or 1 on push).
+
+runs:
+  using: composite
+  steps:
+    - id: get_fetch_depth
+      shell: bash
+      run: echo "fetch_depth=$((${{ github.event.pull_request.commits || 1 }} + 1))" >> $GITHUB_OUTPUT
+    - uses: actions/checkout@v6
+      with:
+        fetch-depth: ${{ steps.get_fetch_depth.outputs.fetch_depth }}

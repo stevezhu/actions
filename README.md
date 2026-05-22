@@ -34,7 +34,7 @@ jobs:
 
 ### Node CI (Turbo)
 
-CI optimized for Turborepo monorepos. Runs `lint`, `build`, and `test` with `--affected`.
+CI optimized for Turborepo monorepos. Runs `lint`, `build`, and `test` with `--affected`. Compose with [`checkout-turbo`](#checkout-turbo) for the matching fetch-depth.
 
 **Path**: `ci-node-turbo`
 
@@ -54,13 +54,21 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 15
     steps:
-      - name: Get fetch depth
-        id: get_fetch_depth
-        run: echo "fetch_depth=$((${{ github.event.pull_request.commits || 1 }} + 1))" >> $GITHUB_OUTPUT
-      - uses: actions/checkout@v6
-        with:
-          fetch-depth: ${{ steps.get_fetch_depth.outputs.fetch_depth }}
+      - uses: stevezhu/actions/checkout-turbo@v2
       - uses: stevezhu/actions/ci-node-turbo@v2
+```
+
+### Checkout (Turbo) {#checkout-turbo}
+
+Checks out the repository with a `fetch-depth` sized for Turborepo's `--affected` diff base (PR commits + 1 on `pull_request`, `1` otherwise). Pair this with [`ci-node-turbo`](#node-ci-turbo) when you don't need a custom checkout.
+
+**Path**: `checkout-turbo`
+
+**Usage**:
+
+```yaml
+steps:
+  - uses: stevezhu/actions/checkout-turbo@v2
 ```
 
 ### NPM Publish
