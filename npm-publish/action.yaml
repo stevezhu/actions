@@ -1,0 +1,37 @@
+name: NPM Publish
+description: Install dependencies, run lint/test/build, and publish to the NPM registry with provenance.
+
+inputs:
+  node-version:
+    description: 'Node.js version to use'
+    required: false
+  node-version-file:
+    description: 'Path to package.json'
+    default: 'package.json'
+    required: false
+  npm-token:
+    description: 'NPM auth token for publishing'
+    required: true
+
+runs:
+  using: composite
+  steps:
+    - uses: pnpm/action-setup@fc06bc1257f339d1d5d8b3a19a8cae5388b55320 # v5
+    - uses: actions/setup-node@v6
+      with:
+        node-version: ${{ inputs.node-version }}
+        node-version-file: ${{ inputs.node-version-file }}
+        cache: pnpm
+        registry-url: 'https://registry.npmjs.org'
+    - shell: bash
+      run: pnpm install
+    - shell: bash
+      run: pnpm run --if-present lint
+    - shell: bash
+      run: pnpm run --if-present test
+    - shell: bash
+      run: pnpm run --if-present build
+    - shell: bash
+      env:
+        NODE_AUTH_TOKEN: ${{ inputs.npm-token }}
+      run: pnpm publish --access public --no-git-checks --provenance
