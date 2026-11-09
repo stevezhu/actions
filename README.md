@@ -71,9 +71,11 @@ steps:
   - uses: stevezhu/actions/checkout-turbo@v2
 ```
 
-### NPM Publish
+### NPM Staged Publish
 
-Runs lint/test/build then publishes to NPM with provenance.
+Runs lint/test/build then stages a publish to NPM with provenance using [`pnpm stage publish`](https://pnpm.io/cli/stage). Requires pnpm 11.3.0 or later, selected by the caller's `packageManager` field.
+
+After the action completes, review the staged package and approve it with `pnpm stage approve <stage-id>` or on npmjs.com. Approval requires 2FA before the version becomes publicly available. The stage ID is printed in the action logs.
 
 **Path**: `npm-publish`
 

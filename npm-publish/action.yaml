@@ -1,5 +1,5 @@
-name: NPM Publish
-description: Install dependencies, run lint/test/build, and publish to the NPM registry with provenance.
+name: NPM Staged Publish
+description: Install dependencies, run lint/test/build, and stage a publish to the NPM registry with provenance.
 
 inputs:
   node-version:
@@ -10,7 +10,7 @@ inputs:
     default: 'package.json'
     required: false
   npm-token:
-    description: 'NPM auth token for publishing'
+    description: 'NPM auth token for staged publishing'
     required: true
 
 runs:
@@ -34,4 +34,4 @@ runs:
     - shell: bash
       env:
         NODE_AUTH_TOKEN: ${{ inputs.npm-token }}
-      run: pnpm publish --access public --no-git-checks --provenance
+      run: pnpm stage publish --access public --no-git-checks --provenance
