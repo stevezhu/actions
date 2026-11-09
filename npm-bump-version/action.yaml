@@ -34,7 +34,7 @@ runs:
         npm version ${{ inputs.version_type }} --no-git-tag-version
         NEW_VERSION=$(node -p "require('./package.json').version")
         echo "new=$NEW_VERSION" >> $GITHUB_OUTPUT
-    - uses: peter-evans/create-pull-request@v8
+    - uses: peter-evans/create-pull-request@5f6978faf089d4d20b00c7766989d076bb2fc7f1 # v8
       with:
         token: ${{ inputs.github-token }}
         sign-commits: true
