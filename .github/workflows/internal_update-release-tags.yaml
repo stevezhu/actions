@@ -11,7 +11,7 @@ jobs:
     runs-on: ubuntu-slim
     timeout-minutes: 5
     steps:
-      - uses: actions/checkout@v6
+      - uses: actions/checkout@v7
       - name: Get major version and update release tag
         run: |
           VERSION=${GITHUB_REF#refs/tags/}
@@ -25,7 +25,7 @@ jobs:
     runs-on: ubuntu-slim
     timeout-minutes: 5
     steps:
-      - uses: actions/checkout@v6
+      - uses: actions/checkout@v7
       - name: Get minor version and update release tag
         run: |
           VERSION=${GITHUB_REF#refs/tags/}

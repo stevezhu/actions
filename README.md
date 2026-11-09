@@ -28,7 +28,7 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 15
     steps:
-      - uses: actions/checkout@v6
+      - uses: actions/checkout@v7
       - uses: stevezhu/actions/ci-node@v2
 ```
 
@@ -95,7 +95,7 @@ jobs:
       contents: read
       id-token: write
     steps:
-      - uses: actions/checkout@v6
+      - uses: actions/checkout@v7
       - uses: stevezhu/actions/npm-publish@v2
         with:
           npm-token: ${{ secrets.NPM_TOKEN }}
@@ -132,7 +132,7 @@ jobs:
       contents: write
       pull-requests: write
     steps:
-      - uses: actions/checkout@v6
+      - uses: actions/checkout@v7
       - uses: stevezhu/actions/npm-bump-version@v2
         with:
           version_type: ${{ inputs.version_type }}
