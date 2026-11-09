@@ -8,5 +8,5 @@
   "devDependencies": {
     "oxfmt": "^0.51.0"
   },
-  "packageManager": "pnpm@11.2.2"
+  "packageManager": "pnpm@12.18.0"
 }
